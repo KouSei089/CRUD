@@ -12,9 +12,12 @@ class PostsController < ApplicationController
   end
 
   def create
-    post = Post.new(post_params)
-    post.save
-    redirect_to posts_url, notice: 'Post was successfully created'
+    @post = Post.new(post_params)
+    if @post.save
+      redirect_to posts_url, notice: 'Post was successfully created'
+    else
+      render "new"
+    end
   end
 
   def edit
@@ -23,8 +26,11 @@ class PostsController < ApplicationController
 
   def update
     post = Post.find(params[:id])
-    post.update!(post_params)
-    redirect_to posts_url, notice: 'Post was successfully updated'
+    if post.update!(post_params)
+      redirect_to posts_url, notice: 'Post was successfully updated'
+    else
+      render "edit"
+    end
   end
 
   def destroy
